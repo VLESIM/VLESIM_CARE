@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./DashboardHospitalBack
+    container_name: backend
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - PORT=5000
+
+  frontend:
+    build: ./DashboardHospital
+    container_name: frontend
+    ports:
+      - "3000:80"  # El build de React será servido por nginx
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
