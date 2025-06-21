@@ -1,0 +1,46 @@
+{
+  "hospital/camas_3": {
+    "llamado": 0,
+    "emergencia": 0
+  },
+  "hospital/camas_402": {
+    "llamado": 1,
+    "emergencia": 2
+  },
+  "hospital/camas_403": {
+    "llamado": 0,
+    "emergencia": 1
+  },
+  "hospital/camas_404": {
+    "llamado": 1,
+    "emergencia": 0
+  },
+  "hospital/camas_405": {
+    "llamado": 1,
+    "emergencia": 1
+  },
+  "hospital/camas_406": {
+    "llamado": 1,
+    "emergencia": 1
+  },
+  "hospital/camas_407": {
+    "llamado": 0,
+    "emergencia": 0
+  },
+  "hospital/camas_408": {
+    "llamado": 5,
+    "emergencia": 1
+  },
+  "hospital/camas_409": {
+    "llamado": 0,
+    "emergencia": 0
+  },
+  "hospital/camas_410": {
+    "llamado": 0,
+    "emergencia": 0
+  },
+  "hospital/camas_411": {
+    "llamado": 3,
+    "emergencia": 3
+  }
+}
