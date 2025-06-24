@@ -58,7 +58,7 @@ const AddBedForm = ({ onAddBed }) => {
 
     try {
       // Send new topic to backend
-      const response = await fetch('http://localhost:3000/topics', {
+      const response = await fetch('http://148.113.207.229:3000/topics', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

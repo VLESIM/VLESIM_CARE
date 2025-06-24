@@ -79,7 +79,7 @@ const BedCard = ({ bed, onDelete }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:3000"); // o IP pública del backend
+    const socket = new WebSocket("ws://148.113.207.229:3000"); // o IP pública del backend
 
     socket.onopen = () => {
       console.log(`🔌 WebSocket conectado para cama ${bed.bedNumber}`);
