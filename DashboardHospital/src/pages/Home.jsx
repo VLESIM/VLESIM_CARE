@@ -154,7 +154,7 @@ const Home = () => {
 
     // WebSocket: actualiza timestamps y tiempos finales según status recibido
     useEffect(() => {
-        const ws = new WebSocket('ws://localhost:3000');
+        const ws = new WebSocket('ws://148.113.207.229:3000');
         wsRef.current = ws;
 
         ws.onopen = () => {

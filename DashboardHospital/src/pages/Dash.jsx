@@ -4,7 +4,7 @@ import { habitacionesData } from "../data/hospitalData";
 import styled from "styled-components";
 import "chart.js/auto";
 
-const API_URL = "http://localhost:3000/llamados-stats";
+const API_URL = "http://148.113.207.229:3000/llamados-stats";
 
 const DashContainer = styled.div`
   height: 100vh;
