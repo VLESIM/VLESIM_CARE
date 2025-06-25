@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { FaHome, FaBars } from "react-icons/fa";
 import { MdDashboardCustomize } from "react-icons/md";
 import styled from "styled-components";
+import logo from "../assets/logo.png"; // Ajusta la ruta según donde esté tu logo
 
 const SidebarContainer = styled.div`
   background: #2c3e50;
@@ -10,6 +11,19 @@ const SidebarContainer = styled.div`
   min-height: 100vh;
   transition: all 0.3s ease;
   padding: 20px 0;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+`;
+
+const LogoImg = styled.img`
+  width: ${({ isCollapsed }) => (isCollapsed ? "40px" : "120px")};
+  height: auto;
+  transition: width 0.3s;
 `;
 
 const ToggleButton = styled.button`
@@ -67,6 +81,9 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer isCollapsed={isCollapsed}>
+      <LogoContainer>
+        <LogoImg src={logo} alt="Logo" isCollapsed={isCollapsed} />
+      </LogoContainer>
       <ToggleButton onClick={() => setIsCollapsed(!isCollapsed)}>
         <FaBars />
       </ToggleButton>

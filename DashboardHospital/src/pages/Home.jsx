@@ -3,7 +3,7 @@ import styled, { keyframes, css } from 'styled-components';
 import { habitacionesData } from '../data/hospitalData';
 
 const WS_URL = window.location.protocol === "https:" ?
-  "wss://" + window.location.host + "/ws" :
+  "wss://" + window.location.host + "/ws":
   "ws://" + window.location.hostname + ":3000";
 
 const HomeContainer = styled.div`
