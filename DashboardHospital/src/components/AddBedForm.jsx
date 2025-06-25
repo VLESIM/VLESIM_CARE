@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+const host = window.location.hostname;
+const port = window.location.protocol === 'https:' ? window.location.port : '3000';
+
+const apiUrl = `${protocol}//${host}:${port}/topics`;
+
 const FormContainer = styled.form`
   background: white;
   padding: 20px;
@@ -58,7 +64,7 @@ const AddBedForm = ({ onAddBed }) => {
 
     try {
       // Send new topic to backend
-      const response = await fetch('http://148.113.207.229:3000/topics', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

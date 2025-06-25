@@ -4,7 +4,11 @@ import { habitacionesData } from "../data/hospitalData";
 import styled from "styled-components";
 import "chart.js/auto";
 
-const API_URL = "http://148.113.207.229:3000/llamados-stats";
+const protocol = window.location.protocol === "https:" ? "https:" : "http:";
+const host = window.location.hostname;
+const port = window.location.protocol === "https:" ? window.location.port : "3000";
+
+const API_URL = `${protocol}//${host}:${port}/llamados-stats`;
 
 const DashContainer = styled.div`
   height: 100vh;

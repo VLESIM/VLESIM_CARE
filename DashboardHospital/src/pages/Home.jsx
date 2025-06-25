@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { habitacionesData } from '../data/hospitalData';
 
+const WS_URL = window.location.protocol === "https:" ?
+  "wss://" + window.location.host + "/ws" :
+  "ws://" + window.location.hostname + ":3000";
+
 const HomeContainer = styled.div`
   padding: 20px;
   display: grid;
@@ -154,7 +158,7 @@ const Home = () => {
 
     // WebSocket: actualiza timestamps y tiempos finales según status recibido
     useEffect(() => {
-        const ws = new WebSocket('ws://148.113.207.229:3000');
+        const ws = new WebSocket(WS_URL);
         wsRef.current = ws;
 
         ws.onopen = () => {

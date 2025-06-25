@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+const WS_URL = window.location.protocol === "https:" ?
+  "wss://" + window.location.host + "/ws" :
+  "ws://" + window.location.hostname + ":3000";
+
 const Card = styled.div`
   background: white;
   border-radius: 10px;
@@ -79,7 +83,7 @@ const BedCard = ({ bed, onDelete }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://148.113.207.229:3000"); // o IP pública del backend
+    const socket = new WebSocket(WS_URL); // o IP pública del backend
 
     socket.onopen = () => {
       console.log(`🔌 WebSocket conectado para cama ${bed.bedNumber}`);
