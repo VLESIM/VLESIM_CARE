@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { habitacionesData } from '../data/hospitalData';
 
-/*const WS_URL = window.location.protocol === "https:" ?
+const WS_URL = window.location.protocol === "https:" ?
   "wss://" + window.location.host + "/ws":
-  "ws://" + window.location.hostname + ":3000";*/
+  "ws://" + window.location.hostname + ":3000";
 
-const WS_URL = "ws://localhost:3000";
+//const WS_URL = "ws://localhost:3000";
 
 const HomeContainer = styled.div`
   height: 100vh;
