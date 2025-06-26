@@ -41,3 +41,8 @@ $gray: #bec6cb;
     
   }
 }
+
+.fila-inferior {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) 1.5fr;
+  // ...
+}

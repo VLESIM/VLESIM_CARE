@@ -83,39 +83,49 @@ const BedCard = ({ bed, onDelete }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socket = new WebSocket(WS_URL); // o IP pública del backend
+    let socket;
+    let reconnectTimeout;
 
-    socket.onopen = () => {
-      console.log(`🔌 WebSocket conectado para cama ${bed.bedNumber}`);
-      setIsConnected(true);
-    };
+    const connectWebSocket = () => {
+      socket = new WebSocket(WS_URL);
 
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.topic === bed.mqttTopic && data.message) {
-          const payload = JSON.parse(data.message); // si el contenido del mensaje es un JSON
-          if (payload.status) {
-            setStatus(payload.status);
+      socket.onopen = () => {
+        console.log(`🔌 WebSocket conectado para cama ${bed.bedNumber}`);
+        setIsConnected(true);
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.topic === bed.mqttTopic && data.message) {
+            const payload = JSON.parse(data.message);
+            if (payload.status) {
+              setStatus(payload.status);
+            }
           }
+        } catch (error) {
+          console.error("❌ Error procesando datos WebSocket:", error);
         }
-      } catch (error) {
-        console.error("❌ Error procesando datos WebSocket:", error);
-      }
+      };
+
+      socket.onerror = (err) => {
+        console.error("❌ Error WebSocket:", err);
+        setIsConnected(false);
+        socket.close();
+      };
+
+      socket.onclose = () => {
+        console.log("🔌 WebSocket desconectado, reintentando en 2s...");
+        setIsConnected(false);
+        reconnectTimeout = setTimeout(connectWebSocket, 2000); // Reintenta en 2 segundos
+      };
     };
 
-    socket.onerror = (err) => {
-      console.error("❌ Error WebSocket:", err);
-      setIsConnected(false);
-    };
-
-    socket.onclose = () => {
-      console.log("🔌 WebSocket desconectado");
-      setIsConnected(false);
-    };
+    connectWebSocket();
 
     return () => {
-      socket.close();
+      if (socket) socket.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
     };
   }, [bed.mqttTopic, bed.bedNumber]);
 

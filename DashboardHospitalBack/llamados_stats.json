@@ -24,8 +24,8 @@
     "emergencia": 1
   },
   "hospital/camas_407": {
-    "llamado": 0,
-    "emergencia": 0
+    "llamado": 12,
+    "emergencia": 7
   },
   "hospital/camas_408": {
     "llamado": 5,

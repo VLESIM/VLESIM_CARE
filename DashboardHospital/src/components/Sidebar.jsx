@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaHome, FaBars } from "react-icons/fa";
 import { MdDashboardCustomize } from "react-icons/md";
 import styled from "styled-components";
-import logo from "../assets/logo.png"; // Ajusta la ruta según donde esté tu logo
+import logo from "../assets/logo.png"; 
 
 const SidebarContainer = styled.div`
   background: #2c3e50;
@@ -21,7 +20,7 @@ const LogoContainer = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: ${({ isCollapsed }) => (isCollapsed ? "40px" : "120px")};
+  width: ${({ $isCollapsed }) => ($isCollapsed ? "40px" : "120px")};
   height: auto;
   transition: width 0.3s;
 `;
@@ -76,13 +75,11 @@ const LinkText = styled.span`
   transition: opacity 0.3s;
 `;
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   return (
     <SidebarContainer isCollapsed={isCollapsed}>
       <LogoContainer>
-        <LogoImg src={logo} alt="Logo" isCollapsed={isCollapsed} />
+        <LogoImg src={logo} alt="Logo" $isCollapsed={isCollapsed} />
       </LogoContainer>
       <ToggleButton onClick={() => setIsCollapsed(!isCollapsed)}>
         <FaBars />
@@ -90,7 +87,7 @@ const Sidebar = () => {
       
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li>
-          <StyledNavLink to="/" exact activeClassName="active">
+          <StyledNavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
             <FaHome />
             <LinkText isCollapsed={isCollapsed}>Home</LinkText>
           </StyledNavLink>

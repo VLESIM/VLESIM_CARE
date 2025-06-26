@@ -2,47 +2,85 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { habitacionesData } from '../data/hospitalData';
 
-const WS_URL = window.location.protocol === "https:" ?
+/*const WS_URL = window.location.protocol === "https:" ?
   "wss://" + window.location.host + "/ws":
-  "ws://" + window.location.hostname + ":3000";
+  "ws://" + window.location.hostname + ":3000";*/
+
+const WS_URL = "ws://localhost:3000";
 
 const HomeContainer = styled.div`
-  padding: 20px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 20px;
   height: 100vh;
+  width: ${({ $isSidebarCollapsed }) => $isSidebarCollapsed ? '95vw' : '88vw'};
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.3s;
+`;
+
+const InformacionContainer2 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 1vw;
+  margin: 0;
+  min-height: 0;
+  height: 40vh;
+  font-size: 1.1rem;
+  overflow: hidden;
+  padding: 0.2vw 0.2vw 0vw 0.6vw; // Añade padding general
+`;
+
+const LlamadaEnProceso = styled.div`
+  background: white;
+  padding: 0.5vw 0.5vw; // Más padding interno
+  border-radius: 1vw;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 1.2rem;
+  min-height: 0;
+  overflow: auto;
+  margin-right: 1vw; // Separación a la derecha
+  margin-left: 0.5vw; // Separación a la izquierda
+  margin-top: 0.5vw; // Separación arriba
+  margin-bottom: 0.5vw; // Separación abajo
 `;
 
 const PlanoContainer = styled.div`
-  padding: 20px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  padding: 1vw 1vw 1vw 1vw; // Más padding interno
+  background: #fff;
+  border-radius: 1vw;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 2vw;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+ 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
 `;
 
 const PlanoFila = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, minmax(100px, 1fr));
-  gap: 10px;
-
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.7vw;
+  min-height: 0;
   &.fila-inferior {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(100px, 1fr)) 100px;
-    gap: 10px;
-
+    grid-template-columns: repeat(5, minmax(0, 1fr)) 1.5fr;
     .main-rooms {
       display: contents;
     }
-    
     .ee-section {
       grid-column: 6;
-      margin-left: 40px;
+      margin-left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 `;
@@ -61,15 +99,20 @@ const blinkEmergencia = keyframes`
 
 const CeldaHabitacion = styled.div`
   aspect-ratio: 1;
-  padding: 15px;
+  padding: 0.7vw;
   background: ${props => props.$tipo === 'EE' ? '#e0e0e0' : 'white'};
-  border: 2px solid #ccc;
-  border-radius: 6px;
+  border: 2.5px solid #ccc;
+  border-radius: 1vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  font-weight: ${props => props.$tipo === 'EE' ? 'normal' : 'bold'};
+  font-size: ${props => props.$tipo === 'EE' ? '1.7rem' : '1.2rem'}; // Reducido
+  font-weight: bold;
+  min-width: ${props => props.$tipo === 'EE' ? '8vw' : '6vw'};
+  min-height: ${props => props.$tipo === 'EE' ? '8vw' : '6vw'};
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
   ${props =>
     props.$status === 'llamado' &&
     css`
@@ -87,51 +130,47 @@ const CeldaHabitacion = styled.div`
 const InformacionContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  margin-top: 20px;
-`;
-
-const InformacionContainer2 = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  gap: 20px;
-  margin-top: 20px;
-`;
-const LlamadaEnProceso = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  gap: 1vw;
+  padding: 10px;
+  margin: 0;
+  min-height: 0;
+  height: 60vh;
+  font-size: 1.1rem; // Cambiado de 1.5rem a 1.1rem
+  overflow: auto;
 `;
 
 const TablaHabitaciones = styled.div`
   background: white;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 1vw;
+  border-radius: 1vw;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
+  min-height: 0;
+  overflow: auto;
+
   h2 {
-    margin-bottom: 15px;
+    margin-bottom: 1vw;
     color: #2c3e50;
+    font-size: 1.2rem; // Reducido
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    
+    font-size: 1rem; // Reducido
+
     th, td {
-      padding: 12px;
+      padding: 0.7vw;
       text-align: left;
       border-bottom: 1px solid #eee;
     }
-    
+
     tr.en-llamada {
       background: #fff5f5;
     }
   }
 `;
 
-const Home = () => {
+const Home = ({ isSidebarCollapsed }) => {
     // Añade el campo status por defecto a cada habitación
     const [habitaciones, setHabitaciones] = useState(
         habitacionesData.map(h => ({ ...h, status: 'normal' }))
@@ -158,65 +197,79 @@ const Home = () => {
 
     // WebSocket: actualiza timestamps y tiempos finales según status recibido
     useEffect(() => {
-        const ws = new WebSocket(WS_URL);
-        wsRef.current = ws;
+        let ws;
+        let reconnectTimeout;
 
-        ws.onopen = () => {
-            console.log('WebSocket conectado');
-        };
+        const connectWebSocket = () => {
+            ws = new WebSocket(WS_URL);
+            wsRef.current = ws;
 
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                if (!data.topic || !data.message) return;
-                const match = data.topic.match(/hospital\/camas_(\d+)/);
-                if (match) {
-                    const numero = parseInt(match[1], 10);
-                    const payload = JSON.parse(data.message);
+            ws.onopen = () => {
+                console.log('WebSocket conectado');
+            };
 
-                    setHabitaciones(prev =>
-                        prev.map(h =>
-                            h.numero === numero
-                                ? { ...h, status: payload.status }
-                                : h
-                        )
-                    );
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (!data.topic || !data.message) return;
+                    const match = data.topic.match(/hospital\/camas_(\d+)/);
+                    if (match) {
+                        const numero = parseInt(match[1], 10);
+                        const payload = JSON.parse(data.message);
 
-                    // Si es llamado o emergencia, guarda timestamp de inicio
-                    if (payload.status === 'llamado' || payload.status === 'emergencia') {
-                        setStatusTimestamps(prev => ({
-                            ...prev,
-                            [numero]: Date.now()
-                        }));
-                        setFinalTimes(prev => ({
-                            ...prev,
-                            [numero]: null
-                        }));
+                        setHabitaciones(prev =>
+                            prev.map(h =>
+                                h.numero === numero
+                                    ? { ...h, status: payload.status }
+                                    : h
+                            )
+                        );
+
+                        // Si es llamado o emergencia, guarda timestamp de inicio
+                        if (payload.status === 'llamado' || payload.status === 'emergencia') {
+                            setStatusTimestamps(prev => ({
+                                ...prev,
+                                [numero]: Date.now()
+                            }));
+                            setFinalTimes(prev => ({
+                                ...prev,
+                                [numero]: null
+                            }));
+                        }
+                        // Si es cancelar, calcula y guarda el tiempo final
+                        if (payload.status === 'Llamado atendido' && statusTimestamps[numero]) {
+                            const tiempo = Math.floor((Date.now() - statusTimestamps[numero]) / 1000);
+                            setFinalTimes(prev => ({
+                                ...prev,
+                                [numero]: tiempo
+                            }));
+                            setStatusTimestamps(prev => ({
+                                ...prev,
+                                [numero]: null
+                            }));
+                        }
                     }
-                    // Si es cancelar, calcula y guarda el tiempo final
-                    if (payload.status === 'Llamado atendido' && statusTimestamps[numero]) {
-                        const tiempo = Math.floor((Date.now() - statusTimestamps[numero]) / 1000);
-                        setFinalTimes(prev => ({
-                            ...prev,
-                            [numero]: tiempo
-                        }));
-                        setStatusTimestamps(prev => ({
-                            ...prev,
-                            [numero]: null
-                        }));
-                    }
+                } catch (err) {
+                    console.error('Error procesando mensaje MQTT:', err);
                 }
-            } catch (err) {
-                console.error('Error procesando mensaje MQTT:', err);
-            }
+            };
+
+            ws.onerror = (err) => {
+                console.error('WebSocket error:', err);
+                ws.close();
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket desconectado, reintentando en 2s...');
+                reconnectTimeout = setTimeout(connectWebSocket, 2000);
+            };
         };
 
-        ws.onclose = () => {
-            console.log('WebSocket desconectado');
-        };
+        connectWebSocket();
 
         return () => {
-            ws.close();
+            if (ws) ws.close();
+            if (reconnectTimeout) clearTimeout(reconnectTimeout);
         };
     }, [statusTimestamps]);
 
@@ -265,10 +318,10 @@ const Home = () => {
     const terceraTabla = habitaciones.slice(tercio * 2, habitaciones.length);
 
     return (
-        <HomeContainer>
+        <HomeContainer $isSidebarCollapsed={isSidebarCollapsed}>
             <InformacionContainer2>
                 <LlamadaEnProceso>
-                    <h2>Llamado en proceso</h2>
+                    <h3>Llamado en proceso</h3>
                     {habitacionEnLlamada ? (
                         <div>
                             <p><strong>Habitación:</strong> {habitacionEnLlamada.numero}</p>
@@ -306,19 +359,18 @@ const Home = () => {
                         ))}
                     </PlanoFila>
                     <PlanoFila className="fila-inferior">
-                        <div className="main-rooms">
-                            {[408, 409, 410, 411].map((num, index) => (
-                                <React.Fragment key={index}>
-                                    {renderCelda(num)}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                        <div className="ee-section">
-                            {renderCelda('EE')}
-                        </div>
+                        {/* Habitaciones de la segunda fila */}
+                        {[408, 409, 410, 411].map((num, index) => (
+                            <React.Fragment key={index}>
+                                {renderCelda(num)}
+                            </React.Fragment>
+                        ))}
+                        {/* EE al final de la fila */}
+                        <CeldaHabitacion $tipo="EE">EE</CeldaHabitacion>
                     </PlanoFila>
                 </PlanoContainer>
             </InformacionContainer2>            
+            <div style={{ height: '0.5vw' }} /> {/* Separación visual */}
             <InformacionContainer>
 
                 <TablaHabitaciones>
